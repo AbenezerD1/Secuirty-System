@@ -1,6 +1,10 @@
 #ifndef KEYPAD_H
 #define KEYPAD_H
 #include "pin_def.h"
+#include "LCD.h"
+
+//function declaration for scope
+void clearPass();
 
 // Keypad layout
 const char keypad[4][4] = {
@@ -9,9 +13,10 @@ const char keypad[4][4] = {
   {'7','8','9','C'},
   {'*','0','#','D'}
 };
+static char password[5]; // 4 chars + null terminator
+static int count = 0;
 
 void setupKeypad(){
-  Serial.begin(9600);
   for (uint8_t i = 0; i < 4; i++) {
     pinMode(rowPins[i], OUTPUT);
     digitalWrite(rowPins[i], HIGH);
@@ -32,7 +37,7 @@ char scanKeypad() {
 
     for (uint8_t col = 0; col < 4; col++) {
       if (digitalRead(colPins[col]) == LOW) {
-        delay(50); // debounce
+        delay(10); // debounce
         return keypad[row][col];
       }
     }
@@ -42,24 +47,51 @@ char scanKeypad() {
 
 // Reads a 4-digit passcode from the keypad
 String getPass() {
-  char password[5]; // 4 chars + null terminator
-  int count = 0;
-
-  while (count < 4) {
+  if (count < 4) {
     char key = scanKeypad();
     if (key) {
       password[count++] = key;
+      LCDUpdateStatusPass(count);
 
       // wait until key is released
       while (scanKeypad() == key) {
-        delay(10);
+        delay(1);
       }
     }
-    delay(10);
+  } else {
+    clearPass();
   }
 
   password[4] = '\0';
   return String(password);
+}
+
+String getNewPass() {
+  while (count < 4) {
+    char key = scanKeypad();
+    if (key) {
+      password[count++] = key;
+      LCDUpdateStatusPass(count);
+
+      // wait until key is released
+      while (scanKeypad() == key) {
+        delay(1);
+      }
+    }
+  }
+
+  password[4] = '\0';
+  return String(password);
+}
+
+void clearPass() {
+  for(int i = 0; i < count; i++){
+    password[i] = '\0';
+  }
+  count = 0;
+
+  //return to idle
+  LCDidle();
 }
 
 #endif
