@@ -7,7 +7,7 @@
 #include "reed_switch.h"
 
 
-Auth auth("633cb6fd", "1111", "1234");
+Auth auth("633cb6fd", "1111", "453cb6fd");
 Servo servo;
 
 void setup(){

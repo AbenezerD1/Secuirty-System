@@ -8,11 +8,11 @@
 
 class Auth{
   public:
-  Auth(String validTagID, String validPin, String validAdminPin){
+  Auth(String validTagID, String validPin, String validAdminKey){
     key = validTagID;
     pinCode = validPin;
-    adminPin = validAdminPin;
-    adminKey = "-1";
+    adminPin = -1;
+    adminKey = validAdminKey;
   }
   void init(){
     setupRFID();
