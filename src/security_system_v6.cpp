@@ -1,4 +1,5 @@
-#include  <Servo.h>
+#include <Arduino.h>
+#include <Servo.h>
 #include <avr/interrupt.h>
 #include "LCD.h"
 #include "Auth.h"
