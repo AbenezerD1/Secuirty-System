@@ -1,6 +1,6 @@
 # Security System
 
- Group final project
+CSS 427 Group final project
 
 For the final project, we made a prototype of a security system that allows authorized users to access a space using a valid RFID tag or pin code to enter. The user interface consists of a 
 
